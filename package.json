@@ -1,0 +1,27 @@
+{
+  "name": "phonebook-mvc",
+  "version": "1.0.0",
+  "description": "Javascript mvc test project",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "dev": "webpack-dev-server --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pugovka/phonebook-mvc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pugovka/phonebook-mvc/issues"
+  },
+  "homepage": "https://github.com/pugovka/phonebook-mvc#readme",
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.7",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
+  }
+}
