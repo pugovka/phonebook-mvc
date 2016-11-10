@@ -2,14 +2,14 @@
 
 export default class PhonebookModel {
   getRecords() {
-    request('http://127.0.0.1:8000/edsa-phonebook/php/get-records-list.php',{ 
+    return request('http://127.0.0.1:8000/edsa-phonebook/php/get-records-list.php',{ 
       mode: 'cors'
     });
   };
 
   addRecord(form) {
     const record = new FormData(form);
-    request('http://127.0.0.1:8000/edsa-phonebook/php/add-record.php', { 
+    return request('http://127.0.0.1:8000/edsa-phonebook/php/add-record.php', { 
       mode: 'cors',
       method: 'post',
       body: record
@@ -20,7 +20,7 @@ export default class PhonebookModel {
     const record = new FormData();
     record.append('record_id', id);
 
-    request('http://127.0.0.1:8000/edsa-phonebook/php/delete-record.php', { 
+    return request('http://127.0.0.1:8000/edsa-phonebook/php/delete-record.php', { 
       mode: 'cors',
       method: 'post',
       body: record
@@ -32,16 +32,11 @@ export default class PhonebookModel {
 }
 
 // Wrap fetch
-function request(url, settings) {
-  fetch(url, settings)
+function request(url, settings, result) {
+  return fetch(url, settings)
     .then(status)
     .then(
-      (response) => response.text()
-    )
-    .then(
-      (responseText) => {
-        console.log(responseText);
-      }
+      (response) => response.json()
     )
     .catch(
       (error) => {
