@@ -27,7 +27,14 @@ export default class PhonebookModel {
     });
   };
 
-  editRecord(id) {
+  editRecord(id, form) {
+    const record = new FormData(form);
+    record.append('record_id', id);
+    return request('http://127.0.0.1:8000/edsa-phonebook/php/edit-record.php', { 
+      mode: 'cors',
+      method: 'post',
+      body: record
+    });
   };
 }
 

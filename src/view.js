@@ -3,8 +3,8 @@ import Observer from './observer';
 
 export default class PhonebookView {
   constructor(addButton) {
-    const self = this;
     this.addRecordButtonClicked = new Observer(this);
+    this.updateRecordButtonClicked = new Observer(this);
     this.deleteRecordButtonClicked = new Observer(this);
 
     // Add button handler
@@ -13,7 +13,7 @@ export default class PhonebookView {
       .addEventListener('click', (event) => {
         event.preventDefault();
         const addRecordForm = document.getElementById('add-record-form');
-        self.addButtonClick(addRecordForm);
+        this.addButtonClick(addRecordForm);
       });
   }
 
@@ -47,14 +47,21 @@ export default class PhonebookView {
     const lastNameValue = recordProperties[0].innerHTML;
     const phoneValue = recordProperties[6].innerHTML;
     const str = 
-      '<form>' +
-        '<input type="text" name="person_data[last_name]" value="' + lastNameValue + '">' +
+      '<form id="edit-record-form">' +
+        '<input type="text" name="person_data[last_name]" id="test" value="' + lastNameValue + '">' +
         '<input type="text" name="person_data[phone_number]" value="' + phoneValue + '">' +
-        '<button data-record-id="' + recordId + '" class="btn--update-record">Save</button>'+
-        '<button class="btn--cancel-record-edit">Cancel</button>'+
+        '<button data-record-id="' + recordId + '" id="btn--update-record">Save</button>'+
+        '<button id="btn--cancel-record-edit">Cancel</button>'+
       '</form>';
 
     record.innerHTML = str;
+
+    document
+      .getElementById('btn--update-record')
+      .addEventListener('click', (event) => {
+        event.preventDefault();
+        this.updateButtonClick(recordId, document.getElementById('edit-record-form'));
+      });
   }
 
   initHandlers() {
@@ -82,6 +89,11 @@ export default class PhonebookView {
 
   editButtonClick(recordId) {
     this.renderEditRecordFields(recordId);
+  }
+
+  updateButtonClick(recordId, form) {
+    // Dispatch update botton clicked events
+    this.updateRecordButtonClicked.notify({ recordId: recordId, form: form });
   }
 
   deleteButtonClick(recordId) {

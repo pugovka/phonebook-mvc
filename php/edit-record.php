@@ -3,9 +3,9 @@ include('connect.php');
 header('Access-Control-Allow-Origin: http://localhost:8080');
 
 $return = array();
-if (!empty($_POST['person_data']['id'])) {
+if (!empty($_POST['record_id'])) {
   // Check if person with this number exists
-  $recordQuery = 'SELECT * FROM phonebook WHERE id=' . $_POST['person_data']['id'] . ';';
+  $recordQuery = 'SELECT * FROM phonebook WHERE id=' . $_POST['record_id'] . ';';
   if ($record = $connection->query($recordQuery)) {
     if ($record->num_rows === 0) {
       $return['value'] = 0;
@@ -20,7 +20,7 @@ if (!empty($_POST['person_data']['id'])) {
           street_id=' . intval($_POST['person_data']['street_id']) . ',
           birth_date="' . $_POST['person_data']['birth_date'] . '",
           phone_number="' . $_POST['person_data']['phone_number'] . '"
-        WHERE id=' . $_POST['person_data']['id'] . '
+        WHERE id=' . $_POST['record_id'] . '
         ;';
       if ($connection->query($insertRecordQuery)) {
         $return['value'] = 1;

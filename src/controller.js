@@ -13,6 +13,14 @@ export default class PhonebookController {
       this.renderRecords();
     });
 
+    // Listen to update record button click from view
+    this._view.updateRecordButtonClicked.attach((sender, data) => {
+      // Edit record in db using model
+      this.editRecord(data.recordId, data.form);
+      // Update records list
+      this.renderRecords();
+    });
+
     // Listen to delete record button click from view
     this._view.deleteRecordButtonClicked.attach((sender, recordId) => {
       // Delete record from db using model
@@ -26,8 +34,8 @@ export default class PhonebookController {
     this._model.addRecord(form);
   }
 
-  editRecord(recordId) {
-    this._model.editRecord(recordId);
+  editRecord(recordId, form) {
+    this._model.editRecord(recordId, form);
   }
 
   deleteRecord(recordId) {
