@@ -2,7 +2,8 @@
 import Observer from './observer';
 
 export default class PhonebookView {
-  constructor() {
+  constructor(addButton) {
+    this.addRecordButtonClicked = new Observer(this);
     this.deleteRecordButtonClicked = new Observer(this);
   }
 
@@ -31,14 +32,29 @@ export default class PhonebookView {
   }
 
   initHandlers() {
-    let self = this;
-    let deleteButtons = document.getElementsByClassName('btn--delete-record');
+    const self = this;
+    const deleteButtons = document.getElementsByClassName('btn--delete-record');
 
     for (let i = 0; i < deleteButtons.length; i++) {
       deleteButtons[i].addEventListener('click', function() {
         self.deleteButtonClick(this.getAttribute('data-record-id'));
       });
     }
+
+    document
+      .getElementById('btn--add-record')
+      .addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const addRecordForm = document.getElementById('add-record-form');
+
+        self.addButtonClick(addRecordForm);
+      });
+
+  }
+
+  addButtonClick(form) {
+    this.addRecordButtonClicked.notify(form);
   }
 
   deleteButtonClick(recordId) {
