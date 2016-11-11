@@ -5,6 +5,8 @@ export default class PhonebookController {
     this._model = model;
     this._view = view;
 
+    this.renderRecords();
+
     // Listen to add button click from view
     this._view.addRecordButtonClicked.attach((sender, form) => {
       // Add record to db using model
