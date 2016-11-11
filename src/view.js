@@ -4,7 +4,17 @@ import Observer from './observer';
 export default class PhonebookView {
   constructor(addButton) {
     this.addRecordButtonClicked = new Observer(this);
+    this.editRecordButtonClicked = new Observer(this);
     this.deleteRecordButtonClicked = new Observer(this);
+
+    // Add button handler
+    document
+      .getElementById('btn--add-record')
+      .addEventListener('click', (event) => {
+        event.preventDefault();
+        const addRecordForm = document.getElementById('add-record-form');
+        self.addButtonClick(addRecordForm);
+      });
   }
 
   render(records) {
