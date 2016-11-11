@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phonebook</title>
+</head>
+<body>
+<div class="phonebook">
+  <div class="record">
+    <div class="record__property">Surname</div>
+    <div class="record__property">Name</div>
+    <div class="record__property">Second name</div>
+    <div class="record__property">City</div>
+    <div class="record__property">Street</div>
+    <div class="record__property">Birthday</div>
+    <div class="record__property">Phone</div>
+    <div class="record__property">Actions</div>
+  </div>
+  <div id="phonebook-body"></div>
+</div>
+<form method="post" id="add-record-form" accept-charset="utf-8">
+  <div class="form-row">
+    <label class="form-label">Surname:</label>
+    <input type="text" name="person_data[last_name]" class="form-input-text" required maxlength="25">
+  </div>
+  <div class="form-row">
+    <label class="form-label">Phone:</label>
+    <input type="text" name="person_data[phone_number]"
+           class="form-input-text"
+           placeholder="+7 ___ ___-__-__" required>
+  </div>
+  <div>
+    <button id="btn--add-record">Add</button>
+  </div>
+</form>
+<script src="bundle.js"></script>
+</body>
+</html>
