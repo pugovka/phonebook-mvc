@@ -5,8 +5,11 @@ export default class PhonebookController {
     this._model = model;
     this._view = view;
 
+    const citiesDatalistId = 'cities-datalist';
+    const cityPropertyName = 'city_name';
+
     this.renderRecords();
-    this.renderCitiesList();
+    this.renderCitiesList(citiesDatalistId, cityPropertyName);
 
     // Listen to add button click from view
     this._view.addRecordButtonClicked.attach((sender, formData) => {
@@ -54,12 +57,12 @@ export default class PhonebookController {
       });
   }
 
-  renderCitiesList() {
+  renderCitiesList(citiesDatalistId, cityPropertyName) {
     const citiesListPromise = this._model.getCitiesList();
 
     citiesListPromise
       .then(citiesList => {
-        this._view.renderCitiesDataList(citiesList);
+        this._view.renderDataList(citiesList, citiesDatalistId, cityPropertyName);
       });
   }
 }

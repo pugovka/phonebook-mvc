@@ -129,16 +129,17 @@ export default class PhonebookView {
     this.deleteRecordButtonClicked.notify(recordId);
   }
 
-  renderCitiesDataList(cities) {
-    let citiesOptions = '';
-    for (let i in cities) {
-      citiesOptions +=
-        '<option value="' + cities[i].city_name + '">';
+  renderDataList(items, dataListId, propertyName) {
+    let options = '';
+    for (let i in items) {
+      options +=
+        '<option value="' + items[i][propertyName] + '">';
     }
 
-    const citiesDatalist = document.getElementById('cities-datalist');
-    citiesDatalist.innerHTML = citiesOptions;
+    const datalist = document.getElementById(dataListId);
+    datalist.innerHTML = options;
   }
+
 }
 
 const isFormDataEqual = (a, b) => {
