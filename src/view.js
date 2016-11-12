@@ -41,28 +41,41 @@ export default class PhonebookView {
     this.initHandlers();
   }
 
+  // Edit record form
   renderEditRecordFields(recordId) {
     const record = document.getElementById('record-' + recordId);
     const recordProperties = record.querySelectorAll('.record__property');
     const lastNameValue = recordProperties[0].innerHTML;
     const phoneValue = recordProperties[6].innerHTML;
-    const str = 
-      '<form id="edit-record-form">' +
-        '<input type="text" name="person_data[last_name]" id="test" value="' + lastNameValue + '">' +
-        '<input type="text" name="person_data[phone_number]" value="' + phoneValue + '">' +
-        '<button data-record-id="' + recordId + '" id="btn--update-record">Save</button>'+
-        '<button id="btn--cancel-record-edit">Cancel</button>'+
-      '</form>';
+    const formNode = document.createElement('form');
+    const saveButton = document.createElement('button');
+    const cancelButton = document.createElement('button');
+    const formBody = 
+      '<input type="text" name="person_data[last_name]" id="test" value="' + lastNameValue + '">' +
+      '<input type="text" name="person_data[phone_number]" value="' + phoneValue + '">';
 
-    record.innerHTML = str;
-    formData = new FormData(document.getElementById('edit-record-form'));
+    formNode.id = 'edit-record-form';
+    formNode.innerHTML = formBody;
+    formNode.appendChild(saveButton);
+    formNode.appendChild(cancelButton);
 
-    document
-      .getElementById('btn--update-record')
+    // Get record values before edit
+    const oldRecordData = new FormData(formNode);
+
+    saveButton
       .addEventListener('click', (event) => {
         event.preventDefault();
-        this.updateButtonClick(recordId, formData);
+        this.updateButtonClick(recordId, formNode, oldRecordData);
       });
+
+    cancelButton
+      .addEventListener('click', (event) => {
+        event.preventDefault();
+        // Remove edit record form
+        this.cancelButtonClick(record, formNode);
+      });
+
+    record.appendChild(formNode);
   }
 
   initHandlers() {
@@ -93,13 +106,57 @@ export default class PhonebookView {
     this.renderEditRecordFields(recordId);
   }
 
-  updateButtonClick(recordId, formData) {
-    // Dispatch update botton clicked events
-    this.updateRecordButtonClicked.notify({ recordId: recordId, formData: formData });
+  updateButtonClick(recordId, editRecordForm, oldRecordData) {
+    const recordData = new FormData(editRecordForm);
+
+    // Check if record data has changed
+    if (!isFormDataEqual(recordData, oldRecordData)) {
+      // Dispatch update botton clicked events
+      this.updateRecordButtonClicked.notify({ recordId, recordData });
+    } else {
+      // Remove edit record form
+      const record = document.getElementById('record-' + recordId);
+      this.cancelButtonClick(record, editRecordForm);
+    }
+  }
+
+  cancelButtonClick(recordNode, editFormNode) {
+    recordNode.removeChild(editFormNode);
   }
 
   deleteButtonClick(recordId) {
     // Dispatch delete button clicked events
     this.deleteRecordButtonClicked.notify(recordId);
   }
+}
+
+const isFormDataEqual = (a, b) => {
+  let aKeys = [];
+  let bKeys = [];
+
+  // Get property names from the first FormData()
+  for (let key of a.keys()) {
+    aKeys.push(key);
+  }
+
+  // Get property names from the second FormData()
+  for (let key of b.keys()) {
+    bKeys.push(key);
+  }
+
+  // Properties number should be equal
+  if (aKeys.length != bKeys.length) {
+    return false;
+  }
+
+  // Compare forms values
+  for (let i = 0; i < aKeys.length; i++) {
+    let key = aKeys[i];
+
+    if (a.get(key) !== b.get(key)) {
+      return false;
+    }
+  }
+
+  return true;
 }

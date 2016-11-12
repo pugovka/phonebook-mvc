@@ -16,9 +16,9 @@ export default class PhonebookController {
     });
 
     // Listen to update record button click from view
-    this._view.updateRecordButtonClicked.attach((sender, formData) => {
+    this._view.updateRecordButtonClicked.attach((sender, data) => {
       // Edit record in db using model
-      this.editRecord(data.recordId, data.formData);
+      this.editRecord(data.recordId, data.recordData);
       // Update records list
       this.renderRecords();
     });
