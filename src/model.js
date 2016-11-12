@@ -34,6 +34,12 @@ export default class PhonebookModel {
       body: record
     });
   }
+
+  getCitiesList() {
+    return request('http://127.0.0.1:8000/edsa-phonebook/php/get-cities-list.php',{ 
+      mode: 'cors'
+    });
+  }
 }
 
 // Wrap fetch
