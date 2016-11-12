@@ -7,9 +7,16 @@ export default class PhonebookController {
 
     const citiesDatalistId = 'cities-datalist';
     const cityPropertyName = 'city_name';
+    const streetsDatalistId = 'streets-datalist';
+    const streetPropertyName = 'street_name';
 
     this.renderRecords();
     this.renderCitiesList(citiesDatalistId, cityPropertyName);
+
+    // Listen to city input change
+    this._view.citySelected.attach((sender, cityId) => {
+      this.renderStreetsList(cityId, streetsDatalistId, streetPropertyName);
+    });
 
     // Listen to add button click from view
     this._view.addRecordButtonClicked.attach((sender, formData) => {
@@ -64,5 +71,18 @@ export default class PhonebookController {
       .then(citiesList => {
         this._view.renderDataList(citiesList, citiesDatalistId, cityPropertyName);
       });
+  }
+
+  renderStreetsList(cityId, streetsDatalistId, streetPropertyName) {
+    const streetsListPromise = this._model.getStreetsList(cityId);
+
+    streetsListPromise
+      .then(streetsList => {
+        this._view.renderDataList(streetsList, streetsDatalistId, streetPropertyName);
+      });
+  }
+
+  selectCity() {
+
   }
 }

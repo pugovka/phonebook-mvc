@@ -17,8 +17,8 @@ export default class PhonebookModel {
 
   deleteRecord(id) {
     const record = new FormData();
-    record.append('record_id', id);
 
+    record.append('record_id', id);
     return request('http://127.0.0.1:8000/edsa-phonebook/php/delete-record.php', { 
       mode: 'cors',
       method: 'post',
@@ -38,6 +38,17 @@ export default class PhonebookModel {
   getCitiesList() {
     return request('http://127.0.0.1:8000/edsa-phonebook/php/get-cities-list.php',{ 
       mode: 'cors'
+    });
+  }
+
+  getStreetsList(cityId) {
+    const city = new FormData();
+
+    city.append('city_id', cityId);
+    return request('http://127.0.0.1:8000/edsa-phonebook/php/get-streets-list.php',{ 
+      mode: 'cors',
+      method: 'post',
+      body: city
     });
   }
 }

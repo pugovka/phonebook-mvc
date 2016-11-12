@@ -6,6 +6,8 @@ export default class PhonebookView {
     this.addRecordButtonClicked = new Observer(this);
     this.updateRecordButtonClicked = new Observer(this);
     this.deleteRecordButtonClicked = new Observer(this);
+    this.citySelected = new Observer(this);
+    const citiesInput = document.getElementById('cities-input');
 
     // Add button handler
     document
@@ -14,6 +16,11 @@ export default class PhonebookView {
         event.preventDefault();
         const addRecordFormData = new FormData(document.getElementById('add-record-form'));
         this.addButtonClick(addRecordFormData);
+      });
+
+    citiesInput
+      .addEventListener('change', () => {
+        this.selectCity(citiesInput.value);
       });
   }
 
@@ -133,13 +140,20 @@ export default class PhonebookView {
     let options = '';
     for (let i in items) {
       options +=
-        '<option value="' + items[i][propertyName] + '">';
+        '<option value="' + items[i][propertyName] + '" data-value-id="' + items[i].id + '">';
     }
 
     const datalist = document.getElementById(dataListId);
     datalist.innerHTML = options;
   }
 
+  selectCity(citiesInputValue) {
+    const selectedCity = document.querySelector('#cities-datalist option[value="' + citiesInputValue + '"]');
+    const selectedCityId = selectedCity.getAttribute('data-value-id');
+
+    // Dispatch select city events
+    this.citySelected.notify(selectedCityId);
+  }
 }
 
 const isFormDataEqual = (a, b) => {
