@@ -81,8 +81,4 @@ export default class PhonebookController {
         this._view.renderDataList(streetsList, streetsDatalistId, streetPropertyName);
       });
   }
-
-  selectCity() {
-
-  }
 }
