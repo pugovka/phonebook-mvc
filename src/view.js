@@ -12,8 +12,8 @@ export default class PhonebookView {
       .getElementById('btn--add-record')
       .addEventListener('click', (event) => {
         event.preventDefault();
-        const addRecordForm = document.getElementById('add-record-form');
-        this.addButtonClick(addRecordForm);
+        const addRecordFormData = new FormData(document.getElementById('add-record-form'));
+        this.addButtonClick(addRecordFormData);
       });
   }
 
@@ -55,12 +55,13 @@ export default class PhonebookView {
       '</form>';
 
     record.innerHTML = str;
+    formData = new FormData(document.getElementById('edit-record-form'));
 
     document
       .getElementById('btn--update-record')
       .addEventListener('click', (event) => {
         event.preventDefault();
-        this.updateButtonClick(recordId, document.getElementById('edit-record-form'));
+        this.updateButtonClick(recordId, formData);
       });
   }
 
@@ -82,18 +83,19 @@ export default class PhonebookView {
     }
   }
 
-  addButtonClick(form) {
+  addButtonClick(formData) {
     // Dispatch add button clicked events
-    this.addRecordButtonClicked.notify(form);
+    this.addRecordButtonClicked.notify(formData);
   }
 
   editButtonClick(recordId) {
+    //Show edit form for a record
     this.renderEditRecordFields(recordId);
   }
 
-  updateButtonClick(recordId, form) {
+  updateButtonClick(recordId, formData) {
     // Dispatch update botton clicked events
-    this.updateRecordButtonClicked.notify({ recordId: recordId, form: form });
+    this.updateRecordButtonClicked.notify({ recordId: recordId, formData: formData });
   }
 
   deleteButtonClick(recordId) {

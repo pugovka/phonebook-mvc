@@ -8,17 +8,17 @@ export default class PhonebookController {
     this.renderRecords();
 
     // Listen to add button click from view
-    this._view.addRecordButtonClicked.attach((sender, form) => {
+    this._view.addRecordButtonClicked.attach((sender, formData) => {
       // Add record to db using model
-      this.addRecord(form);
+      this.addRecord(formData);
       // Update records list
       this.renderRecords();
     });
 
     // Listen to update record button click from view
-    this._view.updateRecordButtonClicked.attach((sender, data) => {
+    this._view.updateRecordButtonClicked.attach((sender, formData) => {
       // Edit record in db using model
-      this.editRecord(data.recordId, data.form);
+      this.editRecord(data.recordId, data.formData);
       // Update records list
       this.renderRecords();
     });
@@ -32,12 +32,12 @@ export default class PhonebookController {
     });
   }
 
-  addRecord(form) {
-    this._model.addRecord(form);
+  addRecord(formData) {
+    this._model.addRecord(formData);
   }
 
-  editRecord(recordId, form) {
-    this._model.editRecord(recordId, form);
+  editRecord(recordId, formData) {
+    this._model.editRecord(recordId, formData);
   }
 
   deleteRecord(recordId) {
