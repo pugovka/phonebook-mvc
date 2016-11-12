@@ -5,7 +5,7 @@ export default class PhonebookModel {
     return request('http://127.0.0.1:8000/edsa-phonebook/php/get-records-list.php',{ 
       mode: 'cors'
     });
-  };
+  }
 
   addRecord(record) {
     return request('http://127.0.0.1:8000/edsa-phonebook/php/add-record.php', { 
@@ -13,7 +13,7 @@ export default class PhonebookModel {
       method: 'post',
       body: record
     });
-  };
+  }
 
   deleteRecord(id) {
     const record = new FormData();
@@ -24,7 +24,7 @@ export default class PhonebookModel {
       method: 'post',
       body: record
     });
-  };
+  }
 
   editRecord(id, record) {
     record.append('record_id', id);
@@ -33,7 +33,7 @@ export default class PhonebookModel {
       method: 'post',
       body: record
     });
-  };
+  }
 }
 
 // Wrap fetch
