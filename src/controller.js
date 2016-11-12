@@ -6,6 +6,7 @@ export default class PhonebookController {
     this._view = view;
 
     this.renderRecords();
+    this.renderCitiesList();
 
     // Listen to add button click from view
     this._view.addRecordButtonClicked.attach((sender, formData) => {
@@ -50,6 +51,15 @@ export default class PhonebookController {
     recordsPromise
       .then(records => {
         this._view.render(records);
+      });
+  }
+
+  renderCitiesList() {
+    const citiesListPromise = this._model.getCitiesList();
+
+    citiesListPromise
+      .then(citiesList => {
+        this._view.renderCitiesDataList(citiesList);
       });
   }
 }

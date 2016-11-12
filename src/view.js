@@ -41,7 +41,7 @@ export default class PhonebookView {
     this.initHandlers();
   }
 
-  // Edit record form
+  // Create edit record form
   renderEditRecordFields(recordId) {
     const record = document.getElementById('record-' + recordId);
     const recordProperties = record.querySelectorAll('.record__property');
@@ -127,6 +127,17 @@ export default class PhonebookView {
   deleteButtonClick(recordId) {
     // Dispatch delete button clicked events
     this.deleteRecordButtonClicked.notify(recordId);
+  }
+
+  renderCitiesDataList(cities) {
+    let citiesOptions = '';
+    for (let i in cities) {
+      citiesOptions +=
+        '<option value="' + cities[i].city_name + '">';
+    }
+
+    const citiesDatalist = document.getElementById('cities-datalist');
+    citiesDatalist.innerHTML = citiesOptions;
   }
 }
 
