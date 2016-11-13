@@ -14,7 +14,7 @@ export default class PhonebookController {
     this.renderCitiesList(citiesDatalistId, cityPropertyName);
 
     // Listen to city input change
-    this._view.citySelected.attach((sender, cityId) => {
+    this._view.citySelectedAddForm.attach((sender, cityId) => {
       this.renderStreetsList(cityId, streetsDatalistId, streetPropertyName);
     });
 
