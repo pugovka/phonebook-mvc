@@ -74,8 +74,8 @@ export default class PhonebookView {
       '<input type="text" value="' + recordProperties[4].innerHTML +
       '" list="streets-datalist-edit-form" name="person_data[street_value]">' +
       '<datalist id="streets-datalist-edit-form"></datalist>' +
-      '<input type="text" name="person_data[birth_date]" value="' + recordProperties[5].innerHTML + '">' +
-      '<input type="text" name="person_data[phone_number]" value="' +
+      '<input type="date" name="person_data[birth_date]" value="' + recordProperties[5].innerHTML + '">' +
+      '<input type="tel" name="person_data[phone_number]" value="' +
       recordProperties[6].innerHTML + '" maxlength="11" required>';
 
     // Delete edit fields of previously edited record
