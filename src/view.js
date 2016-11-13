@@ -40,7 +40,7 @@ export default class PhonebookView {
           '<div class="record__property">' + records[i].phone_number + '</div>' +
           '<div class="record__property">'+
             '<button data-record-id="' + records[i].id + '" class="btn--edit-record">Edit</button>'+
-            '<button data-record-id="' + records[i].id + '" class="btn--delete-record">X</button>'+
+            '<button data-record-id="' + records[i].id + '" class="btn--delete-record">Delete</button>'+
           '</div>' +
         '</div>';
     }
@@ -55,6 +55,7 @@ export default class PhonebookView {
     const record = document.getElementById('record-' + recordId);
     const recordProperties = record.querySelectorAll('.record__property');
     const formNode = document.createElement('form');
+    const buttonsArea = document.createElement('div');
     const saveButton = document.createElement('button');
     const cancelButton = document.createElement('button');
     const formBody = 
@@ -75,8 +76,10 @@ export default class PhonebookView {
     formNode.id = 'edit-record-form';
     formNode.className = 'edit-record-form';
     formNode.innerHTML = formBody;
-    formNode.appendChild(saveButton);
-    formNode.appendChild(cancelButton);
+    buttonsArea.className = 'record__property';
+    buttonsArea.appendChild(saveButton);
+    buttonsArea.appendChild(cancelButton);
+    formNode.appendChild(buttonsArea);
 
     // Get record values before edit
     const oldRecordData = new FormData(formNode);
