@@ -24,7 +24,7 @@ export default class PhonebookView {
 
     citiesInputAddForm
       .addEventListener('change', () => {
-        const cityId = this.getSelectedValueId(citiesInput.value,'#cities-datalist');
+        const cityId = this.getSelectedValueId(citiesInputAddForm.value,'#cities-datalist');
         this.selectCityAddForm(cityId);
       });
   }
