@@ -66,7 +66,7 @@ export default class PhonebookView {
     const saveButton = document.createElement('button');
     const cancelButton = document.createElement('button');
     const formBody = 
-      '<input type="text" name="person_data[last_name]" value="' + recordProperties[0].innerHTML + '">' +
+      '<input type="text" name="person_data[last_name]" value="' + recordProperties[0].innerHTML + '" required>' +
       '<input type="text" name="person_data[first_name]" value="' + recordProperties[1].innerHTML + '">' +
       '<input type="text" name="person_data[second_name]" value="' + recordProperties[2].innerHTML + '">' +
       '<input type="text" value="' + recordProperties[3].innerHTML +
@@ -75,7 +75,8 @@ export default class PhonebookView {
       '" list="streets-datalist-edit-form" name="person_data[street_value]">' +
       '<datalist id="streets-datalist-edit-form"></datalist>' +
       '<input type="text" name="person_data[birth_date]" value="' + recordProperties[5].innerHTML + '">' +
-      '<input type="text" name="person_data[phone_number]" value="' + recordProperties[6].innerHTML + '">';
+      '<input type="text" name="person_data[phone_number]" value="' +
+      recordProperties[6].innerHTML + '" maxlength="11" required>';
 
     // Delete edit fields of previously edited record
     if (this.prevEditedRecord) {
@@ -177,6 +178,10 @@ export default class PhonebookView {
   updateButtonClick(recordId, editRecordForm, oldRecordData) {
     const recordData = new FormData(editRecordForm);
 
+    if (!this.checkRequiredFields(editRecordForm)) {
+      return;
+    }
+
     // Check if record data has changed
     if (!isFormDataEqual(recordData, oldRecordData)) {
       //Change city and street values to their ids
@@ -251,10 +256,12 @@ export default class PhonebookView {
     let isValid = true;
     for (let i = 0; i < form.elements.length; i++) {
       if(form.elements[i].hasAttribute('required')) {
-        if (form.elements[i].value === '' && !form.elements[i].classList.contains('input-required')) {
-          form.elements[i].classList.add('input-required');
+        if (form.elements[i].value === '') {
           isValid = false;
-        } else if (form.elements[i].value !== '' && form.elements[i].classList.contains('input-required')) {
+          if (!form.elements[i].classList.contains('input-required')) {
+            form.elements[i].classList.add('input-required');
+          }
+        } else if (form.elements[i].classList.contains('input-required')) {
           form.elements[i].classList.remove('input-required');
         }
       }
