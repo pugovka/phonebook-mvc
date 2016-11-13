@@ -1,0 +1,68 @@
+.hidden {
+  display: none;
+}
+.container {
+  padding: 0 15px;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+.record {
+  margin-bottom: 10px;
+  width: 100%;
+  &:after {
+    display: block;
+    content: '';
+    clear: both;
+  };
+}
+
+.record--headers {
+  font-weight: bold;
+}
+
+.record__property {
+  width: 90px;
+  min-height: 20px;
+  margin-right: 5px;
+  float: left;
+}
+
+.edit-record-form {
+  margin-bottom: 10px;
+
+  input {
+    width: 81px;
+    margin-right: 5px;
+    float: left;
+    padding-left: 5px;
+  }
+
+  &:after {
+    display: block;
+    content: '';
+    clear: both;
+  };
+}
+
+.phonebook {
+  button {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}
+
+.form-row {
+  margin-bottom: 10px;
+}
+
+.form-label {
+  display: inline-block;
+  width: 150px;
+  font-weight: bold;
+}
+
+.form-input-text {
+  padding-left: 5px;
+  width: 200px;
+}
