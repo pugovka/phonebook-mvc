@@ -166,6 +166,8 @@ export default class PhonebookView {
     // Add ids to the form
     formData.append('person_data[city_id]', cityId);
     formData.append('person_data[street_id]', streetId);
+    // Clear form fields
+    form.reset();
     // Dispatch add button clicked events
     this.addRecordButtonClicked.notify(formData);
   }
