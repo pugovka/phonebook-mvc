@@ -2,7 +2,7 @@
 import Observer from './observer';
 
 export default class PhonebookView {
-  constructor(addButton) {
+  constructor() {
     // Create event listeners objects
     this.addRecordButtonClicked = new Observer(this);
     this.updateRecordButtonClicked = new Observer(this);
@@ -145,27 +145,26 @@ export default class PhonebookView {
   }
 
   addButtonClick(form) {
-    const formData = new FormData(form);
-
     if (!this.checkRequiredFields(form)) {
       return;
     }
-    //Change city and street values to their ids
-    const cityId = this.getSelectedValueId(
-      formData.get('person_data[city_value]'),
-      '#cities-datalist'
-    );
-    const streetId = this.getSelectedValueId(
-      formData.get('person_data[street_value]'),
-      '#streets-datalist'
-    );
 
-    // Delete unnecessary values
-    formData.delete('person_data[city_value]');
-    formData.delete('person_data[street_value]');
-    // Add ids to the form
-    formData.append('person_data[city_id]', cityId);
-    formData.append('person_data[street_id]', streetId);
+    let formData = new FormData(form);
+
+    formData = 
+      this._modifyFormData(formData, '#cities-datalist', 'person_data[city_value]', 'person_data[city_id]');
+
+    if (!formData) {
+      return;
+    }
+
+    formData = 
+      this._modifyFormData(formData, '#streets-datalist', 'person_data[street_value]', 'person_data[street_id]');
+
+    if (!formData) {
+      return;
+    }
+
     // Clear form fields
     form.reset();
     // Dispatch add button clicked events
@@ -178,30 +177,29 @@ export default class PhonebookView {
   }
 
   updateButtonClick(recordId, editRecordForm, oldRecordData) {
-    const recordData = new FormData(editRecordForm);
-
     if (!this.checkRequiredFields(editRecordForm)) {
       return;
     }
 
+    let recordData = new FormData(editRecordForm);
+
     // Check if record data has changed
     if (!isFormDataEqual(recordData, oldRecordData)) {
-      //Change city and street values to their ids
-      const cityId = this.getSelectedValueId(
-        recordData.get('person_data[city_value]'),
-        '#cities-datalist'
-      );
-      const streetId = this.getSelectedValueId(
-        recordData.get('person_data[street_value]'),
-        '#streets-datalist-edit-form'
-      );
 
-      // Delete unnecessary values
-      recordData.delete('person_data[city_value]');
-      recordData.delete('person_data[street_value]');
-      // Add ids to the form
-      recordData.append('person_data[city_id]', cityId);
-      recordData.append('person_data[street_id]', streetId);
+      recordData = 
+        this._modifyFormData(recordData, '#cities-datalist', 'person_data[city_value]', 'person_data[city_id]');
+
+      if (!recordData) {
+        return;
+      }
+
+      recordData = 
+        this._modifyFormData(recordData, '#streets-datalist', 'person_data[street_value]', 'person_data[street_id]');
+
+      if (!recordData) {
+        return;
+      }
+
       // Dispatch update botton clicked events
       this.updateRecordButtonClicked.notify({ recordId, recordData });
     } else {
@@ -270,6 +268,28 @@ export default class PhonebookView {
     }
 
     return isValid;
+  }
+
+  // Change form values to their ids from datalists
+  _modifyFormData(formData, dataListSelector, formDataValueKey, formDataIdKey) {
+    const selectedValue = formData.get(formDataValueKey);
+
+    //Change city and street values to their ids
+    const selectedId = this.getSelectedValueId(
+      selectedValue,
+      dataListSelector
+    );
+    
+    if (selectedValue && !selectedId) {
+      return false;
+    }
+
+    // Delete values
+    formData.delete(formDataValueKey);
+    // Add ids to the form
+    formData.append(formDataIdKey, selectedId);
+
+    return formData;
   }
 }
 
