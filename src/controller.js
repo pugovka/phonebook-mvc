@@ -7,7 +7,8 @@ export default class PhonebookController {
 
     const citiesDatalistId = 'cities-datalist';
     const cityPropertyName = 'city_name';
-    const streetsDatalistId = 'streets-datalist';
+    const streetsDatalistIdAddForm = 'streets-datalist';
+    const streetsDatalistIdEditForm = 'streets-datalist-edit-form';
     const streetPropertyName = 'street_name';
 
     this.renderRecords();
@@ -15,7 +16,11 @@ export default class PhonebookController {
 
     // Listen to city input change
     this._view.citySelectedAddForm.attach((sender, cityId) => {
-      this.renderStreetsList(cityId, streetsDatalistId, streetPropertyName);
+      this.renderStreetsList(cityId, streetsDatalistIdAddForm, streetPropertyName);
+    });
+
+    this._view.citySelectedEditForm.attach((sender, cityId) => {
+      this.renderStreetsList(cityId, streetsDatalistIdEditForm, streetPropertyName);
     });
 
     // Listen to add button click from view

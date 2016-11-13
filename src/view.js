@@ -3,12 +3,15 @@ import Observer from './observer';
 
 export default class PhonebookView {
   constructor(addButton) {
+    // Create event listeners objects
     this.addRecordButtonClicked = new Observer(this);
     this.updateRecordButtonClicked = new Observer(this);
     this.deleteRecordButtonClicked = new Observer(this);
-    this.citySelected = new Observer(this);
-    const citiesInput = document.getElementById('cities-input');
+    this.citySelectedAddForm = new Observer(this);
+    this.citySelectedEditForm = new Observer(this);
+
     this.prevEditedRecord = false;
+    const citiesInputAddForm = document.getElementById('cities-input');
 
     // Add button handler
     document
@@ -19,10 +22,10 @@ export default class PhonebookView {
         this.addButtonClick(addRecordFormData);
       });
 
-    citiesInput
+    citiesInputAddForm
       .addEventListener('change', () => {
         const cityId = this.getSelectedValueId(citiesInput.value,'#cities-datalist');
-        this.selectCity(cityId);
+        this.selectCityAddForm(cityId);
       });
   }
 
@@ -45,6 +48,11 @@ export default class PhonebookView {
         '</div>';
     }
 
+    // Edit form closed, unset prevEditedRecord
+    if (this.prevEditedRecord) {
+      this.prevEditedRecord = false;
+    }
+
     const app = document.getElementById('phonebook-body');
     app.innerHTML = str;
     this.initHandlers();
@@ -52,6 +60,7 @@ export default class PhonebookView {
 
   // Create edit record form
   renderEditRecordFields(recordId) {
+    const self = this;
     const record = document.getElementById('record-' + recordId);
     const recordProperties = record.querySelectorAll('.record__property');
     const formNode = document.createElement('form');
@@ -62,15 +71,19 @@ export default class PhonebookView {
       '<input type="text" name="person_data[last_name]" value="' + recordProperties[0].innerHTML + '">' +
       '<input type="text" name="person_data[first_name]" value="' + recordProperties[1].innerHTML + '">' +
       '<input type="text" name="person_data[second_name]" value="' + recordProperties[2].innerHTML + '">' +
-      '<input type="text" value="' + recordProperties[3].innerHTML + '" list="cities-datalist">' +
-      '<input type="text" name="person_data[street_id]" value="' + recordProperties[4].innerHTML + '">' +
+      '<input type="text" value="' + recordProperties[3].innerHTML +
+      '" list="cities-datalist" id="cities-input-edit-form" name="person_data[city_value]">' +
+      '<input type="text" value="' + recordProperties[4].innerHTML +
+      '" list="streets-datalist-edit-form" name="person_data[street_value]">' +
+      '<datalist id="streets-datalist-edit-form"></datalist>' +
       '<input type="text" name="person_data[birth_date]" value="' + recordProperties[5].innerHTML + '">' +
       '<input type="text" name="person_data[phone_number]" value="' + recordProperties[6].innerHTML + '">';
 
     // Delete edit fields of previously edited record
     if (this.prevEditedRecord) {
-      this.cancelButtonClick(this.prevEditedRecord);
+      self.cancelButtonClick(this.prevEditedRecord);
     }
+
     saveButton.innerHTML = 'Save';
     cancelButton.innerHTML = 'Cancel';
     formNode.id = 'edit-record-form';
@@ -87,21 +100,27 @@ export default class PhonebookView {
     saveButton
       .addEventListener('click', (event) => {
         event.preventDefault();
-        this.updateButtonClick(recordId, formNode, oldRecordData);
+        self.updateButtonClick(recordId, formNode, oldRecordData);
       });
 
     cancelButton
       .addEventListener('click', (event) => {
         event.preventDefault();
         // Remove edit record form
-        this.cancelButtonClick(record);
+        self.cancelButtonClick(record);
       });
 
     const recordParentNode = record.parentNode;
 
     recordParentNode.insertBefore(formNode, record);
     record.classList.add('hidden');
-    this.prevEditedRecord = record;
+    self.prevEditedRecord = record;
+
+    document
+      .getElementById('cities-input-edit-form')
+      .addEventListener('change', function() {
+        self.selectCityEditForm(this);
+      });
   }
 
   initHandlers() {
@@ -153,6 +172,22 @@ export default class PhonebookView {
 
     // Check if record data has changed
     if (!isFormDataEqual(recordData, oldRecordData)) {
+      //Change city and street values to their ids
+      const cityId = this.getSelectedValueId(
+        recordData.get('person_data[city_value]'),
+        '#cities-datalist'
+      );
+      const streetId = this.getSelectedValueId(
+        recordData.get('person_data[street_value]'),
+        '#streets-datalist-edit-form'
+      );
+
+      // Delete unnecessary values
+      recordData.delete('person_data[city_value]');
+      recordData.delete('person_data[street_value]');
+      // Add ids to the form
+      recordData.append('person_data[city_id]', cityId);
+      recordData.append('person_data[street_id]', streetId);
       // Dispatch update botton clicked events
       this.updateRecordButtonClicked.notify({ recordId, recordData });
     } else {
@@ -169,7 +204,6 @@ export default class PhonebookView {
     recordNode.classList.remove('hidden');
     // Unset previously edited record
     this.prevEditedRecord = false;
-
   }
 
   deleteButtonClick(recordId) {
@@ -188,15 +222,22 @@ export default class PhonebookView {
     datalist.innerHTML = options;
   }
 
-  selectCity(selectedCityId) {
-    // Dispatch select city events
-    this.citySelected.notify(selectedCityId);
+  selectCityAddForm(selectedCityId) {
+    // Dispatch select city from add form events
+    this.citySelectedAddForm.notify(selectedCityId);
+  }
+
+  selectCityEditForm(citiesInput) {
+    const selectedCityId = this.getSelectedValueId(citiesInput.value,'#cities-datalist');
+
+  // Dispatch select city from edit form events
+    this.citySelectedEditForm.notify(selectedCityId);
   }
 
   getSelectedValueId(inputValue, listSelector) {
     const selectedItem = document.querySelector(listSelector + ' option[value="' + inputValue + '"]');
 
-    return selectedItem.getAttribute('data-value-id');
+    return (selectedItem) ? selectedItem.getAttribute('data-value-id') : false;
   }
 }
 
