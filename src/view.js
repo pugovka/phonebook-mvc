@@ -18,8 +18,7 @@ export default class PhonebookView {
       .getElementById('btn--add-record')
       .addEventListener('click', (event) => {
         event.preventDefault();
-        const addRecordFormData = new FormData(document.getElementById('add-record-form'));
-        this.addButtonClick(addRecordFormData);
+        this.addButtonClick(document.getElementById('add-record-form'));
       });
 
     citiesInputAddForm
@@ -58,7 +57,6 @@ export default class PhonebookView {
     this.initHandlers();
   }
 
-  // Create edit record form
   renderEditRecordFields(recordId) {
     const self = this;
     const record = document.getElementById('record-' + recordId);
@@ -116,11 +114,15 @@ export default class PhonebookView {
     record.classList.add('hidden');
     self.prevEditedRecord = record;
 
-    document
-      .getElementById('cities-input-edit-form')
+    const citiesInputEditForm = document.getElementById('cities-input-edit-form');
+
+    citiesInputEditForm
       .addEventListener('change', function() {
         self.selectCityEditForm(this);
       });
+
+    // Add datalist street options
+    self.selectCityEditForm(citiesInputEditForm);
   }
 
   initHandlers() {
@@ -141,7 +143,12 @@ export default class PhonebookView {
     }
   }
 
-  addButtonClick(formData) {
+  addButtonClick(form) {
+    const formData = new FormData(form);
+
+    if (!this.checkRequiredFields(form)) {
+      return;
+    }
     //Change city and street values to their ids
     const cityId = this.getSelectedValueId(
       formData.get('person_data[city_value]'),
@@ -230,7 +237,7 @@ export default class PhonebookView {
   selectCityEditForm(citiesInput) {
     const selectedCityId = this.getSelectedValueId(citiesInput.value,'#cities-datalist');
 
-  // Dispatch select city from edit form events
+    // Dispatch select city from edit form events
     this.citySelectedEditForm.notify(selectedCityId);
   }
 
@@ -238,6 +245,22 @@ export default class PhonebookView {
     const selectedItem = document.querySelector(listSelector + ' option[value="' + inputValue + '"]');
 
     return (selectedItem) ? selectedItem.getAttribute('data-value-id') : false;
+  }
+
+  checkRequiredFields(form) {
+    let isValid = true;
+    for (let i = 0; i < form.elements.length; i++) {
+      if(form.elements[i].hasAttribute('required')) {
+        if (form.elements[i].value === '' && !form.elements[i].classList.contains('input-required')) {
+          form.elements[i].classList.add('input-required');
+          isValid = false;
+        } else if (form.elements[i].value !== '' && form.elements[i].classList.contains('input-required')) {
+          form.elements[i].classList.remove('input-required');
+        }
+      }
+    }
+
+    return isValid;
   }
 }
 
