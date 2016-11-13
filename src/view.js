@@ -43,7 +43,7 @@ export default class PhonebookView {
           '<div class="record__property">' + records[i].phone_number + '</div>' +
           '<div class="record__property">'+
             '<button data-record-id="' + records[i].id + '" class="btn--edit-record">Edit</button>'+
-            '<button data-record-id="' + records[i].id + '" class="btn--delete-record">Delete</button>'+
+            '<button data-record-id="' + records[i].id + '" class="btn--delete-record">Del.</button>'+
           '</div>' +
         '</div>';
     }
@@ -85,7 +85,7 @@ export default class PhonebookView {
     }
 
     saveButton.innerHTML = 'Save';
-    cancelButton.innerHTML = 'Cancel';
+    cancelButton.innerHTML = 'Back';
     formNode.id = 'edit-record-form';
     formNode.className = 'edit-record-form';
     formNode.innerHTML = formBody;
