@@ -6,56 +6,59 @@
 </head>
 <body>
 <div class="container">
+  <h1>Single page phonebook application</h1>
   <div class="phonebook">
-  <div class="record record--headers">
-    <div class="record__property">Surname</div>
-    <div class="record__property">Name</div>
-    <div class="record__property">Second name</div>
-    <div class="record__property">City</div>
-    <div class="record__property">Street</div>
-    <div class="record__property">Birthday</div>
-    <div class="record__property">Phone</div>
-    <div class="record__property">Actions</div>
-  </div>
-  <div id="phonebook-body"></div>
-</div>
-<form method="post" id="add-record-form" accept-charset="utf-8">
-  <div class="form-row">
-    <label class="form-label">Surname:</label>
-    <input type="text" name="person_data[last_name]" class="form-input-text" required maxlength="25">
-  </div>
-  <div class="form-row">
-    <label class="form-label">Name:</label>
-    <input type="text" name="person_data[first_name]" class="form-input-text" maxlength="25">
-  </div>
-  <div class="form-row">
-    <label class="form-label">Second name:</label>
-    <input type="text" name="person_data[second_name]" class="form-input-text" maxlength="25">
-  </div>
-  <div class="form-row">
-    <label class="form-label">City:</label>
-    <input type="text" id="cities-input" class="form-input-text" maxlength="25" list="cities-datalist" name="person_data[city_value]">
+    <div class="edit-form-error"></div>
+    <div class="record record--headers">
+      <div class="record__property">Surname</div>
+      <div class="record__property">Name</div>
+      <div class="record__property">Second name</div>
+      <div class="record__property">City</div>
+      <div class="record__property">Street</div>
+      <div class="record__property">Birthday</div>
+      <div class="record__property">Phone</div>
+      <div class="record__property">Actions</div>
+    </div>
+    <div id="phonebook-body"></div>
+    <div class="form-header">Add record</div>
+    <form method="post" id="add-record-form" class="form" accept-charset="utf-8">
+    <div class="form-row">
+      <label class="form-label">Surname* :</label>
+      <input type="text" name="person_data[last_name]" class="form-input-text" required maxlength="25">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Name:</label>
+      <input type="text" name="person_data[first_name]" class="form-input-text" maxlength="25">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Second name:</label>
+      <input type="text" name="person_data[second_name]" class="form-input-text" maxlength="25">
+    </div>
+    <div class="form-row">
+      <label class="form-label">City:</label>
+      <input type="text" id="cities-input" class="form-input-text" maxlength="25" list="cities-datalist" name="person_data[city_value]">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Street:</label>
+      <input type="text" id="streets-input" class="form-input-text" maxlength="25" list="streets-datalist" name="person_data[street_value]">
+      <datalist id="streets-datalist"></datalist>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Birth date:</label>
+      <input type="date" name="person_data[birth_date]" class="form-input-text" maxlength="25">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Phone*:</label>
+      <input type="tel" name="person_data[phone_number]" maxlength="11" 
+             class="form-input-text" required>
+    </div>
+    <div>* - required fields</div>
+    <div class="form-bottom">
+      <button id="btn--add-record" class="btn--submit">Add</button>
+    </div>
+    </form>
     <datalist id="cities-datalist"></datalist>
   </div>
-  <div class="form-row">
-    <label class="form-label">Street:</label>
-    <input type="hidden" name="person_data[street_id]">
-    <input type="text" class="form-input-text" maxlength="25" list="streets-datalist" name="person_data[street_value]">
-    <datalist id="streets-datalist"></datalist>
-  </div>
-  <div class="form-row">
-    <label class="form-label">Birth date:</label>
-    <input type="text" name="person_data[birth_date]" class="form-input-text" maxlength="25">
-  </div>
-  <div class="form-row">
-    <label class="form-label">Phone:</label>
-    <input type="text" name="person_data[phone_number]"
-           class="form-input-text" required>
-  </div>
-  <div>
-    <button id="btn--add-record">Add</button>
-  </div>
-</form>
 </div>
 <script src="bundle.js"></script>
 </body>
