@@ -29,7 +29,7 @@ export default class PhonebookView {
       });
   }
 
-  _checkRequiredFields(form) {
+  _validateRequiredFields(form) {
     let isValid = true;
     for (let i = 0; i < form.elements.length; i++) {
       if(form.elements[i].hasAttribute('required')) {
@@ -69,7 +69,7 @@ export default class PhonebookView {
 
     return formData;
   }
-  
+
   _renderEditRecordFields(recordId) {
     const self = this;
     const record = document.getElementById('record-' + recordId);
@@ -157,6 +157,15 @@ export default class PhonebookView {
     }
   }
 
+  _addFormErrorMessage(prevNodeSelector, errorText) {
+    const prevNode = document.querySelector(prevNodeSelector);
+    const systemMessage = document.createElement('div');
+
+    systemMessage.className = 'form-error-message';
+    systemMessage.innerHTML = errorText;
+    prevNode.parentNode.appendChild(systemMessage);
+  }
+
   render(records) {
     let str = '';
     for (let i in records) {
@@ -187,16 +196,25 @@ export default class PhonebookView {
   }
 
   addButtonClick(form) {
-    if (!this._checkRequiredFields(form)) {
+    if (!this._validateRequiredFields(form)) {
       return;
     }
 
     let formData = new FormData(form);
 
+    // Delete error messages
+    const errorMessagess = document.querySelectorAll('.form-error-message');
+    if (errorMessagess) {
+      errorMessagess.forEach(element => {
+        element.remove();
+      });
+    }
+
     formData = 
       this._convertFormDataValue(formData, '#cities-datalist', 'person_data[city_value]', 'person_data[city_id]');
 
     if (!formData) {
+      this._addFormErrorMessage('#cities-datalist', 'Please select city from the list');
       return;
     }
 
@@ -204,6 +222,7 @@ export default class PhonebookView {
       this._convertFormDataValue(formData, '#streets-datalist', 'person_data[street_value]', 'person_data[street_id]');
 
     if (!formData) {
+      this._addFormErrorMessage('#streets-datalist', 'Please select street from the list');
       return;
     }
 
@@ -219,7 +238,7 @@ export default class PhonebookView {
   }
 
   updateButtonClick(recordId, editRecordForm, oldRecordData) {
-    if (!this._checkRequiredFields(editRecordForm)) {
+    if (!this._validateRequiredFields(editRecordForm)) {
       return;
     }
 
