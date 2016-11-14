@@ -159,19 +159,33 @@ export default class PhonebookView {
     }
   }
 
-  _addFormErrorMessage(prevNodeSelector, errorText) {
-    const prevNode = document.querySelector(prevNodeSelector);
+  _formErrorMessage(nodeSelector, errorText, errorNode) {
+    const node = document.querySelector(nodeSelector);
     const systemMessage = document.createElement('div');
 
     systemMessage.className = 'form-error-message';
     systemMessage.innerHTML = errorText;
-    prevNode.parentNode.appendChild(systemMessage);
+
+    if (errorNode) {
+      node.appendChild(systemMessage);
+    } else {
+      node.parentNode.appendChild(systemMessage);
+    }
   }
 
   _getSelectedValueId(inputValue, listSelector) {
     const selectedItem = document.querySelector(listSelector + ' option[value="' + inputValue + '"]');
 
     return (selectedItem) ? selectedItem.getAttribute('data-value-id') : false;
+  }
+
+  _deleteErrorMessages() {
+    const errorMessagess = document.querySelectorAll('.form-error-message');
+    if (errorMessagess) {
+      errorMessagess.forEach(element => {
+        element.remove();
+      });
+    }
   }
 
   render(records) {
@@ -210,13 +224,7 @@ export default class PhonebookView {
 
     let formData = new FormData(form);
 
-    // Delete error messages
-    const errorMessagess = document.querySelectorAll('.form-error-message');
-    if (errorMessagess) {
-      errorMessagess.forEach(element => {
-        element.remove();
-      });
-    }
+    this._deleteErrorMessages();
 
     formData = 
       this._convertFormDataValue(
@@ -227,8 +235,8 @@ export default class PhonebookView {
       );
 
     if (!formData) {
-      this._addFormErrorMessage(
-        this.citiesDatalistSelector,
+      this._formErrorMessage(
+        this.citiesInputAddForm,
         'Please select city from the list'
       );
       return;
@@ -242,8 +250,8 @@ export default class PhonebookView {
       );
 
     if (!formData) {
-      this._addFormErrorMessage(
-        this.streetsDatalistSelectorAddForm,
+      this._formErrorMessage(
+        this.streetsInputAddForm,
         'Please select street from the list'
       );
       return;
@@ -297,9 +305,10 @@ export default class PhonebookView {
       return true;
     }
 
+    this._deleteErrorMessages();
+
     // Check if record data has changed
     if (!isFormDataEqual(recordData, oldRecordData)) {
-
       // Get city id by it's value
       recordData = 
         this._convertFormDataValue(
@@ -310,9 +319,10 @@ export default class PhonebookView {
         );
 
       if (!recordData) {
-        this._addFormErrorMessage(
-          this.citiesDatalistSelector,
-          'Please select city from the list'
+        this._formErrorMessage(
+          this.errorBlockSelector,
+          'Please select city from the list',
+          true
         );
         return;
       }
@@ -327,9 +337,10 @@ export default class PhonebookView {
         );
 
       if (!recordData) {
-        this._addFormErrorMessage(
-          this.streetsDatalistSelectorEditForm,
-          'Please select street from the list'
+        this._formErrorMessage(
+          this.errorBlockSelector,
+          'Please select street from the list',
+          true
         );
         return;
       }
@@ -374,7 +385,7 @@ export default class PhonebookView {
   }
 
   selectCityEditForm(citiesInput) {
-    const selectedCityId = this._getSelectedValueId(citiesInput.value,this.citiesDatalistSelector);
+    const selectedCityId = this._getSelectedValueId(citiesInput.value, this.citiesDatalistSelector);
 
     // Dispatch select city from edit form events
     this.citySelectedEditForm.notify(selectedCityId);
