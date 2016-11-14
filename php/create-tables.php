@@ -45,7 +45,7 @@ if ($connection->query($streetsTable) === TRUE) {
 
 $cityStreetLinkTable =
   'CREATE TABLE IF NOT EXISTS city_street(
-    street_id INT NOT NULL,
+    street_id INT NOT NULL UNIQUE,
     city_id INT NOT NULL,
     primary key (city_id, street_id)
   );';
