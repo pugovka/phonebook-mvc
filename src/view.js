@@ -2,7 +2,7 @@
 import Observer from './observer';
 
 export default class PhonebookView {
-  constructor() {
+  constructor(options) {
     // Create event listeners objects
     this.addRecordButtonClicked = new Observer(this);
     this.updateRecordButtonClicked = new Observer(this);
@@ -12,6 +12,8 @@ export default class PhonebookView {
 
     this.prevEditedRecord = false;
     const citiesInputAddForm = document.getElementById('cities-input');
+
+    Object.assign(this, options);
 
     // Add button handler
     document
@@ -24,7 +26,7 @@ export default class PhonebookView {
     // Change city handler on an add record form
     citiesInputAddForm
       .addEventListener('change', () => {
-        const cityId = this._getSelectedValueId(citiesInputAddForm.value,'#cities-datalist');
+        const cityId = this._getSelectedValueId(citiesInputAddForm.value, this.citiesDatalistSelector);
         this.selectCityAddForm(cityId);
       });
   }
@@ -217,18 +219,33 @@ export default class PhonebookView {
     }
 
     formData = 
-      this._convertFormDataValue(formData, '#cities-datalist', 'person_data[city_value]', 'person_data[city_id]');
+      this._convertFormDataValue(
+        formData,
+        this.citiesDatalistSelector,
+        'person_data[city_value]',
+        'person_data[city_id]'
+      );
 
     if (!formData) {
-      this._addFormErrorMessage('#cities-datalist', 'Please select city from the list');
+      this._addFormErrorMessage(
+        this.citiesDatalistSelector,
+        'Please select city from the list'
+      );
       return;
     }
 
     formData = 
-      this._convertFormDataValue(formData, '#streets-datalist', 'person_data[street_value]', 'person_data[street_id]');
+      this._convertFormDataValue(
+        formData, this.streetsDatalistSelectorAddForm,
+        'person_data[street_value]',
+        'person_data[street_id]'
+      );
 
     if (!formData) {
-      this._addFormErrorMessage('#streets-datalist', 'Please select street from the list');
+      this._addFormErrorMessage(
+        this.streetsDatalistSelectorAddForm,
+        'Please select street from the list'
+      );
       return;
     }
 
@@ -285,17 +302,35 @@ export default class PhonebookView {
 
       // Get city id by it's value
       recordData = 
-        this._convertFormDataValue(recordData, '#cities-datalist', 'person_data[city_value]', 'person_data[city_id]');
+        this._convertFormDataValue(
+          recordData,
+          this.citiesDatalistSelector,
+          'person_data[city_value]',
+          'person_data[city_id]'
+        );
 
       if (!recordData) {
+        this._addFormErrorMessage(
+          this.citiesDatalistSelector,
+          'Please select city from the list'
+        );
         return;
       }
 
       // Get street id by it's value
       recordData = 
-        this._convertFormDataValue(recordData, '#streets-datalist', 'person_data[street_value]', 'person_data[street_id]');
+        this._convertFormDataValue(
+          recordData,
+          this.streetsDatalistSelectorEditForm,
+          'person_data[street_value]',
+          'person_data[street_id]'
+        );
 
       if (!recordData) {
+        this._addFormErrorMessage(
+          this.streetsDatalistSelectorEditForm,
+          'Please select street from the list'
+        );
         return;
       }
 
@@ -339,7 +374,7 @@ export default class PhonebookView {
   }
 
   selectCityEditForm(citiesInput) {
-    const selectedCityId = this._getSelectedValueId(citiesInput.value,'#cities-datalist');
+    const selectedCityId = this._getSelectedValueId(citiesInput.value,this.citiesDatalistSelector);
 
     // Dispatch select city from edit form events
     this.citySelectedEditForm.notify(selectedCityId);
