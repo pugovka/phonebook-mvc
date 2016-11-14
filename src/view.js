@@ -29,36 +29,48 @@ export default class PhonebookView {
       });
   }
 
-  render(records) {
-    let str = '';
-    for (let i in records) {
-      str += 
-        '<div class="record" id="record-' + records[i].id + '">' +
-          '<div class="record__property">' + records[i].last_name + '</div>' +
-          '<div class="record__property">' + records[i].first_name + '</div>' +
-          '<div class="record__property">' + records[i].second_name + '</div>' +
-          '<div class="record__property">' + records[i].city_name + '</div>' +
-          '<div class="record__property">' + records[i].street_name + '</div>' +
-          '<div class="record__property">' + records[i].birth_date + '</div>' +
-          '<div class="record__property">' + records[i].phone_number + '</div>' +
-          '<div class="record__property">'+
-            '<button data-record-id="' + records[i].id + '" class="btn--edit-record">Edit</button>'+
-            '<button data-record-id="' + records[i].id + '" class="btn--delete-record">Del.</button>'+
-          '</div>' +
-        '</div>';
+  _checkRequiredFields(form) {
+    let isValid = true;
+    for (let i = 0; i < form.elements.length; i++) {
+      if(form.elements[i].hasAttribute('required')) {
+        if (form.elements[i].value === '') {
+          isValid = false;
+          if (!form.elements[i].classList.contains('input-required')) {
+            form.elements[i].classList.add('input-required');
+          }
+        } else if (form.elements[i].classList.contains('input-required')) {
+          form.elements[i].classList.remove('input-required');
+        }
+      }
     }
 
-    // Edit form closed, unset prevEditedRecord
-    if (this.prevEditedRecord) {
-      this.prevEditedRecord = false;
-    }
-
-    const app = document.getElementById('phonebook-body');
-    app.innerHTML = str;
-    this.initHandlers();
+    return isValid;
   }
 
-  renderEditRecordFields(recordId) {
+  // Change form values to their ids from datalists
+  _convertFormDataValue(formData, dataListSelector, formDataValueKey, formDataIdKey) {
+    const selectedValue = formData.get(formDataValueKey);
+
+    //Change city and street values to their ids
+    const selectedId = this.getSelectedValueId(
+      selectedValue,
+      dataListSelector
+    );
+
+    // Return if value is set and not from existing values list
+    if (selectedValue && !selectedId) {
+      return false;
+    }
+
+    // Delete values
+    formData.delete(formDataValueKey);
+    // Add ids to the form
+    formData.append(formDataIdKey, selectedId);
+
+    return formData;
+  }
+  
+  _renderEditRecordFields(recordId) {
     const self = this;
     const record = document.getElementById('record-' + recordId);
     const recordProperties = record.querySelectorAll('.record__property');
@@ -127,7 +139,7 @@ export default class PhonebookView {
     self.selectCityEditForm(citiesInputEditForm);
   }
 
-  initHandlers() {
+  _initHandlers() {
     const self = this;
     const editButtons = document.getElementsByClassName('btn--edit-record');
     const deleteButtons = document.getElementsByClassName('btn--delete-record');
@@ -145,8 +157,37 @@ export default class PhonebookView {
     }
   }
 
+  render(records) {
+    let str = '';
+    for (let i in records) {
+      str += 
+        '<div class="record" id="record-' + records[i].id + '">' +
+          '<div class="record__property">' + records[i].last_name + '</div>' +
+          '<div class="record__property">' + records[i].first_name + '</div>' +
+          '<div class="record__property">' + records[i].second_name + '</div>' +
+          '<div class="record__property">' + records[i].city_name + '</div>' +
+          '<div class="record__property">' + records[i].street_name + '</div>' +
+          '<div class="record__property">' + records[i].birth_date + '</div>' +
+          '<div class="record__property">' + records[i].phone_number + '</div>' +
+          '<div class="record__property">'+
+            '<button data-record-id="' + records[i].id + '" class="btn--edit-record">Edit</button>'+
+            '<button data-record-id="' + records[i].id + '" class="btn--delete-record">Del.</button>'+
+          '</div>' +
+        '</div>';
+    }
+
+    // Edit form closed, unset prevEditedRecord
+    if (this.prevEditedRecord) {
+      this.prevEditedRecord = false;
+    }
+
+    const app = document.getElementById('phonebook-body');
+    app.innerHTML = str;
+    this._initHandlers();
+  }
+
   addButtonClick(form) {
-    if (!this.checkRequiredFields(form)) {
+    if (!this._checkRequiredFields(form)) {
       return;
     }
 
@@ -174,11 +215,11 @@ export default class PhonebookView {
 
   editButtonClick(recordId) {
     //Show edit form for a record
-    this.renderEditRecordFields(recordId);
+    this._renderEditRecordFields(recordId);
   }
 
   updateButtonClick(recordId, editRecordForm, oldRecordData) {
-    if (!this.checkRequiredFields(editRecordForm)) {
+    if (!this._checkRequiredFields(editRecordForm)) {
       return;
     }
 
@@ -283,46 +324,5 @@ export default class PhonebookView {
     const selectedItem = document.querySelector(listSelector + ' option[value="' + inputValue + '"]');
 
     return (selectedItem) ? selectedItem.getAttribute('data-value-id') : false;
-  }
-
-  checkRequiredFields(form) {
-    let isValid = true;
-    for (let i = 0; i < form.elements.length; i++) {
-      if(form.elements[i].hasAttribute('required')) {
-        if (form.elements[i].value === '') {
-          isValid = false;
-          if (!form.elements[i].classList.contains('input-required')) {
-            form.elements[i].classList.add('input-required');
-          }
-        } else if (form.elements[i].classList.contains('input-required')) {
-          form.elements[i].classList.remove('input-required');
-        }
-      }
-    }
-
-    return isValid;
-  }
-
-  // Change form values to their ids from datalists
-  _convertFormDataValue(formData, dataListSelector, formDataValueKey, formDataIdKey) {
-    const selectedValue = formData.get(formDataValueKey);
-
-    //Change city and street values to their ids
-    const selectedId = this.getSelectedValueId(
-      selectedValue,
-      dataListSelector
-    );
-
-    // Return if value is set and not from existing values list
-    if (selectedValue && !selectedId) {
-      return false;
-    }
-
-    // Delete values
-    formData.delete(formDataValueKey);
-    // Add ids to the form
-    formData.append(formDataIdKey, selectedId);
-
-    return formData;
   }
 }
