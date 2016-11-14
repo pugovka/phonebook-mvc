@@ -4,6 +4,7 @@ import PhonebookView from './view';
 import PhonebookController from './controller';
 import style from './styles.scss';
 
+// Server url
 const url = 'http://127.0.0.1:8000/edsa-phonebook/php/';
 const controllerOptions = {
   citiesDatalistId: 'cities-datalist',
