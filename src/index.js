@@ -4,6 +4,7 @@ import PhonebookView from './view';
 import PhonebookController from './controller';
 import style from './styles.scss';
 
+const url = 'http://127.0.0.1:8000/edsa-phonebook/php/';
 const controllerOptions = {
   citiesDatalistId: 'cities-datalist',
   cityPropertyName: 'city_name',
@@ -11,7 +12,6 @@ const controllerOptions = {
   streetsDatalistIdEditForm: 'streets-datalist-edit-form',
   streetPropertyName: 'street_name'
 };
-
 const viewOptions = {
   citiesDatalistSelector: '#cities-datalist',
   streetsDatalistSelectorAddForm: '#streets-datalist',
@@ -21,6 +21,6 @@ const viewOptions = {
   streetsInputAddForm: '#streets-input'
 }
 
-const model = new PhonebookModel();
+const model = new PhonebookModel(url);
 const view = new PhonebookView(viewOptions);
 const controller = new PhonebookController(model, view, controllerOptions);
