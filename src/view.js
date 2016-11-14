@@ -24,7 +24,7 @@ export default class PhonebookView {
     // Change city handler on an add record form
     citiesInputAddForm
       .addEventListener('change', () => {
-        const cityId = this.getSelectedValueId(citiesInputAddForm.value,'#cities-datalist');
+        const cityId = this._getSelectedValueId(citiesInputAddForm.value,'#cities-datalist');
         this.selectCityAddForm(cityId);
       });
   }
@@ -52,7 +52,7 @@ export default class PhonebookView {
     const selectedValue = formData.get(formDataValueKey);
 
     //Change city and street values to their ids
-    const selectedId = this.getSelectedValueId(
+    const selectedId = this._getSelectedValueId(
       selectedValue,
       dataListSelector
     );
@@ -164,6 +164,12 @@ export default class PhonebookView {
     systemMessage.className = 'form-error-message';
     systemMessage.innerHTML = errorText;
     prevNode.parentNode.appendChild(systemMessage);
+  }
+
+  _getSelectedValueId(inputValue, listSelector) {
+    const selectedItem = document.querySelector(listSelector + ' option[value="' + inputValue + '"]');
+
+    return (selectedItem) ? selectedItem.getAttribute('data-value-id') : false;
   }
 
   render(records) {
@@ -333,15 +339,9 @@ export default class PhonebookView {
   }
 
   selectCityEditForm(citiesInput) {
-    const selectedCityId = this.getSelectedValueId(citiesInput.value,'#cities-datalist');
+    const selectedCityId = this._getSelectedValueId(citiesInput.value,'#cities-datalist');
 
     // Dispatch select city from edit form events
     this.citySelectedEditForm.notify(selectedCityId);
-  }
-
-  getSelectedValueId(inputValue, listSelector) {
-    const selectedItem = document.querySelector(listSelector + ' option[value="' + inputValue + '"]');
-
-    return (selectedItem) ? selectedItem.getAttribute('data-value-id') : false;
   }
 }
