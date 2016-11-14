@@ -1,15 +1,17 @@
 'use strict';
 
 export default class PhonebookController {
-  constructor(model, view) {
+  constructor(model, view, options) {
     this._model = model;
     this._view = view;
 
-    const citiesDatalistId = 'cities-datalist';
-    const cityPropertyName = 'city_name';
-    const streetsDatalistIdAddForm = 'streets-datalist';
-    const streetsDatalistIdEditForm = 'streets-datalist-edit-form';
-    const streetPropertyName = 'street_name';
+    const {
+      citiesDatalistId,
+      cityPropertyName,
+      streetsDatalistIdAddForm,
+      streetsDatalistIdEditForm,
+      streetPropertyName
+    } = options;
 
     this.renderRecords();
     this.renderCitiesList(citiesDatalistId, cityPropertyName);
