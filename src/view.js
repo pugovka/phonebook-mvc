@@ -183,6 +183,36 @@ export default class PhonebookView {
     }
 
     let recordData = new FormData(editRecordForm);
+    const isFormDataEqual = (a, b) => {
+      let aKeys = [];
+      let bKeys = [];
+
+      // Get property names from the first FormData()
+      for (let key of a.keys()) {
+        aKeys.push(key);
+      }
+
+      // Get property names from the second FormData()
+      for (let key of b.keys()) {
+        bKeys.push(key);
+      }
+
+      // Properties number should be equal
+      if (aKeys.length != bKeys.length) {
+        return false;
+      }
+
+      // Compare forms values
+      for (let i = 0; i < aKeys.length; i++) {
+        let key = aKeys[i];
+
+        if (a.get(key) !== b.get(key)) {
+          return false;
+        }
+      }
+
+      return true;
+    }
 
     // Check if record data has changed
     if (!isFormDataEqual(recordData, oldRecordData)) {
@@ -295,35 +325,4 @@ export default class PhonebookView {
 
     return formData;
   }
-}
-
-const isFormDataEqual = (a, b) => {
-  let aKeys = [];
-  let bKeys = [];
-
-  // Get property names from the first FormData()
-  for (let key of a.keys()) {
-    aKeys.push(key);
-  }
-
-  // Get property names from the second FormData()
-  for (let key of b.keys()) {
-    bKeys.push(key);
-  }
-
-  // Properties number should be equal
-  if (aKeys.length != bKeys.length) {
-    return false;
-  }
-
-  // Compare forms values
-  for (let i = 0; i < aKeys.length; i++) {
-    let key = aKeys[i];
-
-    if (a.get(key) !== b.get(key)) {
-      return false;
-    }
-  }
-
-  return true;
 }
