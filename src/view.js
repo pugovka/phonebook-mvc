@@ -21,6 +21,7 @@ export default class PhonebookView {
         this.addButtonClick(document.getElementById('add-record-form'));
       });
 
+    // Change city handler on an add record form
     citiesInputAddForm
       .addEventListener('change', () => {
         const cityId = this.getSelectedValueId(citiesInputAddForm.value,'#cities-datalist');
@@ -152,14 +153,14 @@ export default class PhonebookView {
     let formData = new FormData(form);
 
     formData = 
-      this._modifyFormData(formData, '#cities-datalist', 'person_data[city_value]', 'person_data[city_id]');
+      this._convertFormDataValue(formData, '#cities-datalist', 'person_data[city_value]', 'person_data[city_id]');
 
     if (!formData) {
       return;
     }
 
     formData = 
-      this._modifyFormData(formData, '#streets-datalist', 'person_data[street_value]', 'person_data[street_id]');
+      this._convertFormDataValue(formData, '#streets-datalist', 'person_data[street_value]', 'person_data[street_id]');
 
     if (!formData) {
       return;
@@ -186,15 +187,17 @@ export default class PhonebookView {
     // Check if record data has changed
     if (!isFormDataEqual(recordData, oldRecordData)) {
 
+      // Get city id by it's value
       recordData = 
-        this._modifyFormData(recordData, '#cities-datalist', 'person_data[city_value]', 'person_data[city_id]');
+        this._convertFormDataValue(recordData, '#cities-datalist', 'person_data[city_value]', 'person_data[city_id]');
 
       if (!recordData) {
         return;
       }
 
+      // Get street id by it's value
       recordData = 
-        this._modifyFormData(recordData, '#streets-datalist', 'person_data[street_value]', 'person_data[street_id]');
+        this._convertFormDataValue(recordData, '#streets-datalist', 'person_data[street_value]', 'person_data[street_id]');
 
       if (!recordData) {
         return;
@@ -271,7 +274,7 @@ export default class PhonebookView {
   }
 
   // Change form values to their ids from datalists
-  _modifyFormData(formData, dataListSelector, formDataValueKey, formDataIdKey) {
+  _convertFormDataValue(formData, dataListSelector, formDataValueKey, formDataIdKey) {
     const selectedValue = formData.get(formDataValueKey);
 
     //Change city and street values to their ids
@@ -279,7 +282,8 @@ export default class PhonebookView {
       selectedValue,
       dataListSelector
     );
-    
+
+    // Return if value is set and not from existing values list
     if (selectedValue && !selectedId) {
       return false;
     }
