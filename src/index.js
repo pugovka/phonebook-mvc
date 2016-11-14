@@ -4,6 +4,23 @@ import PhonebookView from './view';
 import PhonebookController from './controller';
 import style from './styles.scss';
 
+const controllerOptions = {
+  citiesDatalistId: 'cities-datalist',
+  cityPropertyName: 'city_name',
+  streetsDatalistIdAddForm: 'streets-datalist',
+  streetsDatalistIdEditForm: 'streets-datalist-edit-form',
+  streetPropertyName: 'street_name'
+};
+
+const viewOptions = {
+  citiesDatalistSelector: '#cities-datalist',
+  streetsDatalistSelectorAddForm: '#streets-datalist',
+  streetsDatalistSelectorEditForm: '#streets-datalist-edit-form',
+  errorBlockSelector: '.edit-form-error',
+  citiesInputAddForm: '#cities-input',
+  streetsInputAddForm: '#streets-input'
+}
+
 const model = new PhonebookModel();
-const view = new PhonebookView();
-const controller = new PhonebookController(model, view);
+const view = new PhonebookView(viewOptions);
+const controller = new PhonebookController(model, view, controllerOptions);
