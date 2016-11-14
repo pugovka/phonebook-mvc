@@ -1,6 +1,5 @@
 <?php
 include('connect.php');
-header('Access-Control-Allow-Origin: http://localhost:8080');
 
 $return = array();
 if (!empty($_POST['record_id'])) {

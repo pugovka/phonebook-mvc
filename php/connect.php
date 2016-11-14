@@ -13,3 +13,5 @@ if ($connection->connect_error) {
     printf("Charset error: %s\n", $connection->error);
   }
 }
+
+header('Access-Control-Allow-Origin: http://localhost:8080');

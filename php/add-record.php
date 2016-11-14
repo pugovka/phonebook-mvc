@@ -1,6 +1,5 @@
 <?php
 include('connect.php');
-header('Access-Control-Allow-Origin: http://localhost:8080');
 
 // Check if fields are empty
 $fieldsIsValid = true;
