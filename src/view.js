@@ -65,22 +65,26 @@ export default class PhonebookView {
     const dataType = field.getAttribute('data-type');
     const value = field.value;
     let isValid = true;
+    let errorText = '';
 
     switch (dataType) {
       case 'text':
         if (!value.match(/^[a-z]+$/i) && value) {
           isValid = false;
+          errorText = 'Only characters a-z is allowed in this field';
         }
         break;
       case 'number':
         if (!value.match(/^[0-9\+\(\)]+$/) && value) {
           isValid =  false;
+          errorText = 'Only digits and +() is allowed in this field'
         }
         break;
     }
 
     if (!isValid) {
       field.classList.add(this.inputErrorClass);
+      this._formErrorMessage(field, errorText);
     } else {
       this._removeClass(field, this.inputErrorClass);
     }
@@ -210,9 +214,8 @@ export default class PhonebookView {
     }
   }
 
-  // Add error message to errorNode if exists, else in nodeSelector node parent block
-  _formErrorMessage(nodeSelector, errorText, errorNode) {
-    const node = document.querySelector(nodeSelector);
+  // Add error message to errorNode if exists, else in node parent block
+  _formErrorMessage(node, errorText, errorNode) {
     const systemMessage = document.createElement('div');
 
     systemMessage.className = 'form-error-message';
@@ -288,7 +291,7 @@ export default class PhonebookView {
 
     if (!formData) {
       this._formErrorMessage(
-        this.citiesInputAddForm,
+        document.querySelector(this.citiesInputAddForm),
         'Please select city from the list'
       );
       return;
@@ -303,7 +306,7 @@ export default class PhonebookView {
 
     if (!formData) {
       this._formErrorMessage(
-        this.streetsInputAddForm,
+        document.querySelector(this.streetsInputAddForm),
         'Please select street from the list'
       );
       return;
@@ -372,7 +375,7 @@ export default class PhonebookView {
 
       if (!recordData) {
         this._formErrorMessage(
-          this.errorBlockSelector,
+          document.querySelector(this.errorBlockSelector),
           'Please select city from the list',
           true
         );
@@ -390,7 +393,7 @@ export default class PhonebookView {
 
       if (!recordData) {
         this._formErrorMessage(
-          this.errorBlockSelector,
+          document.querySelector(this.errorBlockSelector),
           'Please select street from the list',
           true
         );
