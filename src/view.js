@@ -71,13 +71,13 @@ export default class PhonebookView {
       case 'text':
         if (!value.match(/^[a-z]+$/i) && value) {
           isValid = false;
-          errorText = 'Only characters a-z is allowed in this field';
+          errorText = 'Only characters a-z are allowed in this field';
         }
         break;
       case 'number':
         if (!value.match(/^[0-9\+\(\)]+$/) && value) {
           isValid =  false;
-          errorText = 'Only digits and +() is allowed in this field'
+          errorText = 'Only digits and +() are allowed in this field'
         }
         break;
     }
@@ -273,13 +273,13 @@ export default class PhonebookView {
   }
 
   addButtonClick(form) {
+    this._deleteErrorMessages();
+
     if (!this._validateFormFields(form)) {
       return;
     }
 
     let formData = new FormData(form);
-
-    this._deleteErrorMessages();
 
     formData = 
       this._convertFormDataValue(
@@ -324,6 +324,8 @@ export default class PhonebookView {
   }
 
   updateButtonClick(recordId, editRecordForm, oldRecordData) {
+    this._deleteErrorMessages();
+
     if (!this._validateFormFields(editRecordForm)) {
       return;
     }
@@ -359,8 +361,6 @@ export default class PhonebookView {
 
       return true;
     }
-
-    this._deleteErrorMessages();
 
     // Check if record data has changed
     if (!isFormDataEqual(recordData, oldRecordData)) {
