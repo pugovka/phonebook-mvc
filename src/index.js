@@ -19,7 +19,8 @@ const viewOptions = {
   streetsDatalistSelectorEditForm: '#streets-datalist-edit-form',
   errorBlockSelector: '.edit-form-error',
   citiesInputAddForm: '#cities-input',
-  streetsInputAddForm: '#streets-input'
+  streetsInputAddForm: '#streets-input',
+  inputErrorClass: 'input-required'
 }
 
 const model = new PhonebookModel(url);

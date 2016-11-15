@@ -26,15 +26,18 @@
     <form method="post" id="add-record-form" class="form" accept-charset="utf-8">
     <div class="form-row">
       <label class="form-label">Surname* :</label>
-      <input type="text" name="person_data[last_name]" class="form-input-text" required maxlength="25">
+      <input type="text" name="person_data[last_name]" 
+        class="form-input-text" required maxlength="25" data-type="text">
     </div>
     <div class="form-row">
       <label class="form-label">Name:</label>
-      <input type="text" name="person_data[first_name]" class="form-input-text" maxlength="25">
+      <input type="text" name="person_data[first_name]" 
+      class="form-input-text" maxlength="25" data-type="text">
     </div>
     <div class="form-row">
       <label class="form-label">Second name:</label>
-      <input type="text" name="person_data[second_name]" class="form-input-text" maxlength="25">
+      <input type="text" name="person_data[second_name]" 
+      class="form-input-text" maxlength="25" data-type="text">
     </div>
     <div class="form-row">
       <label class="form-label">City:</label>
@@ -52,7 +55,7 @@
     <div class="form-row">
       <label class="form-label">Phone*:</label>
       <input type="tel" name="person_data[phone_number]" maxlength="11" 
-             class="form-input-text" required>
+             class="form-input-text" required data-type="number">
     </div>
     <div>* - required fields</div>
     <div class="form-bottom">

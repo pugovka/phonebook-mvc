@@ -31,22 +31,67 @@ export default class PhonebookView {
       });
   }
 
-  _validateRequiredFields(form) {
+  _validateFormFields(form) {
     let isValid = true;
+
     for (let i = 0; i < form.elements.length; i++) {
-      if(form.elements[i].hasAttribute('required')) {
-        if (form.elements[i].value === '') {
+      if (form.elements[i].hasAttribute('required')) {
+        if (!this._validateRequiredField(form.elements[i])) {
           isValid = false;
-          if (!form.elements[i].classList.contains('input-required')) {
-            form.elements[i].classList.add('input-required');
-          }
-        } else if (form.elements[i].classList.contains('input-required')) {
-          form.elements[i].classList.remove('input-required');
+        }
+      }
+
+      if (form.elements[i].hasAttribute('data-type')) {
+        if (!this._validateFieldType(form.elements[i])) {
+          isValid = false;
         }
       }
     }
+    return isValid;
+  }
+
+  _validateRequiredField(field) {
+    if (field.value === '') {
+      field.classList.add(this.inputErrorClass);
+      return false;
+    } else {
+      this._removeClass(field, this.inputErrorClass);
+    }
+
+    return true;
+  }
+
+  _validateFieldType(field) {
+    const dataType = field.getAttribute('data-type');
+    const value = field.value;
+    let isValid = true;
+
+    switch (dataType) {
+      case 'text':
+        if (!value.match(/^[a-z]+$/i) && value) {
+          isValid = false;
+        }
+        break;
+      case 'number':
+        if (!value.match(/^[0-9\+\(\)]+$/) && value) {
+          isValid =  false;
+        }
+        break;
+    }
+
+    if (!isValid) {
+      field.classList.add(this.inputErrorClass);
+    } else {
+      this._removeClass(field, this.inputErrorClass);
+    }
 
     return isValid;
+  }
+
+  _removeClass(node, className) {
+    if (node.classList.contains(className)) {
+      node.classList.remove(className);
+    }
   }
 
   // Change form values to their ids from datalists
@@ -81,9 +126,15 @@ export default class PhonebookView {
     const saveButton = document.createElement('button');
     const cancelButton = document.createElement('button');
     const formBody = 
-      '<input type="text" name="person_data[last_name]" value="' + recordProperties[0].innerHTML + '" required>' +
-      '<input type="text" name="person_data[first_name]" value="' + recordProperties[1].innerHTML + '">' +
-      '<input type="text" name="person_data[second_name]" value="' + recordProperties[2].innerHTML + '">' +
+      '<input type="text" name="person_data[last_name]" value="' +
+      recordProperties[0].innerHTML +
+      '" required data-type="text">' +
+      '<input type="text" name="person_data[first_name]" value="' +
+      recordProperties[1].innerHTML +
+      '" data-type="text">' +
+      '<input type="text" name="person_data[second_name]" value="' +
+      recordProperties[2].innerHTML +
+      '" data-type="text">' +
       '<input type="text" value="' + recordProperties[3].innerHTML +
       '" list="cities-datalist" id="cities-input-edit-form" name="person_data[city_value]">' +
       '<input type="text" value="' + recordProperties[4].innerHTML +
@@ -91,7 +142,7 @@ export default class PhonebookView {
       '<datalist id="streets-datalist-edit-form"></datalist>' +
       '<input type="date" name="person_data[birth_date]" value="' + recordProperties[5].innerHTML + '">' +
       '<input type="tel" name="person_data[phone_number]" value="' +
-      recordProperties[6].innerHTML + '" maxlength="11" required>';
+      recordProperties[6].innerHTML + '" maxlength="11" required data-type="number">';
 
     // Delete edit fields of previously edited record
     if (this.prevEditedRecord) {
@@ -218,7 +269,7 @@ export default class PhonebookView {
   }
 
   addButtonClick(form) {
-    if (!this._validateRequiredFields(form)) {
+    if (!this._validateFormFields(form)) {
       return;
     }
 
@@ -269,7 +320,7 @@ export default class PhonebookView {
   }
 
   updateButtonClick(recordId, editRecordForm, oldRecordData) {
-    if (!this._validateRequiredFields(editRecordForm)) {
+    if (!this._validateFormFields(editRecordForm)) {
       return;
     }
 
