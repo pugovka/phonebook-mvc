@@ -32,6 +32,7 @@ export default class PhonebookView {
   }
 
   _validateFormFields(form) {
+    this._removeFormFieldsErrorClass(this.inputErrorClass);
     let isValid = true;
 
     for (let i = 0; i < form.elements.length; i++) {
@@ -54,8 +55,6 @@ export default class PhonebookView {
     if (field.value === '') {
       field.classList.add(this.inputErrorClass);
       return false;
-    } else {
-      this._removeClass(field, this.inputErrorClass);
     }
 
     return true;
@@ -85,16 +84,15 @@ export default class PhonebookView {
     if (!isValid) {
       field.classList.add(this.inputErrorClass);
       this._formErrorMessage(field, errorText);
-    } else {
-      this._removeClass(field, this.inputErrorClass);
     }
 
     return isValid;
   }
 
-  _removeClass(node, className) {
-    if (node.classList.contains(className)) {
-      node.classList.remove(className);
+  _removeFormFieldsErrorClass(className) {
+    const errorNodes = document.getElementsByClassName(className);
+    for (let i = 0; i < errorNodes.length; i++) {
+      errorNodes[i].classList.remove(className);
     }
   }
 
