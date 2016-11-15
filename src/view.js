@@ -210,6 +210,7 @@ export default class PhonebookView {
     }
   }
 
+  // Add error message to errorNode if exists, else in nodeSelector node parent block
   _formErrorMessage(nodeSelector, errorText, errorNode) {
     const node = document.querySelector(nodeSelector);
     const systemMessage = document.createElement('div');
