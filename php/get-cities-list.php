@@ -6,8 +6,7 @@ $citiesListQuery = '
     cities.id,
     cities.city_name
   FROM cities
-  ORDER BY city_name ASC
-  LIMIT 10;';
+  ORDER BY city_name ASC';
 
 if ($citiesList = $connection->query($citiesListQuery)) {
   $arrCities = array();
