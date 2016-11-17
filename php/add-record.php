@@ -4,10 +4,38 @@ include('connect.php');
 // Check if fields are empty
 $fieldsIsValid = true;
 $return = array();
+// Validation settings
+$settings = array(
+  'last_name' => array(
+    'filter' => FILTER_VALIDATE_REGEXP,
+    'options' => array('regexp' => '/^[a-zA-Z]+$/')
+  ),
+  'first_name' => array(
+    'filter' => FILTER_VALIDATE_REGEXP,
+    'options' => array('regexp' => '/^[a-zA-Z]+$/')
+  ),
+  'second_name' => array(
+    'filter' => FILTER_VALIDATE_REGEXP,
+    'options' => array('regexp' => '/^[a-zA-Z]+$/')
+  ),
+  'city_id' => FILTER_VALIDATE_INT,
+  'street_id' => FILTER_VALIDATE_INT,
+  'birth_date' => array(
+    'filter' => FILTER_VALIDATE_REGEXP,
+    'options' => array('regexp' => '/^[0-9a-zA-Z\-]+$/')
+  ),
+  'phone_number' => array(
+    'filter' => FILTER_VALIDATE_REGEXP,
+    'options' => array('regexp' => '/^[0-9\+\(\)]+$/')
+  ),
+);
+
+$data = filter_var_array($_POST['person_data']);
+
 if (
   !empty($_POST) && (
-      empty($_POST['person_data']['last_name']) ||
-      empty($_POST['person_data']['phone_number'])
+      empty($data['last_name']) ||
+      empty($data['phone_number'])
     )
   ) {
   $fieldsIsValid = false;
@@ -31,13 +59,13 @@ if (!$fieldsIsValid) {
           phone_number
         )
         VALUES(
-          "' . $_POST['person_data']['last_name'] . '",
-          "' . $_POST['person_data']['first_name'] . '",
-          "' . $_POST['person_data']['second_name'] . '",
-          "' . intval($_POST['person_data']['city_id']) . '",
-          "' . intval($_POST['person_data']['street_id']) . '",
-          "' . $_POST['person_data']['birth_date'] . '",
-          "' . $_POST['person_data']['phone_number'] . '"
+          "' . $data['last_name'] . '",
+          "' . $data['first_name'] . '",
+          "' . $data['person_data']['second_name'] . '",
+          "' . intval($data['city_id']) . '",
+          "' . intval($data['street_id']) . '",
+          "' . $data['birth_date'] . '",
+          "' . $data['phone_number'] . '"
         );
       ';
       if ($connection->query($newRecord)) {
