@@ -127,24 +127,23 @@ export default class PhonebookView {
     const buttonsArea = document.createElement('div');
     const saveButton = document.createElement('button');
     const cancelButton = document.createElement('button');
-    const formBody = 
-      '<input type="text" name="person_data[last_name]" value="' +
-      recordProperties[0].innerHTML +
-      '" required data-type="text">' +
-      '<input type="text" name="person_data[first_name]" value="' +
-      recordProperties[1].innerHTML +
-      '" data-type="text">' +
-      '<input type="text" name="person_data[second_name]" value="' +
-      recordProperties[2].innerHTML +
-      '" data-type="text">' +
-      '<input type="text" value="' + recordProperties[3].innerHTML +
-      '" list="cities-datalist" id="cities-input-edit-form" name="person_data[city_value]">' +
-      '<input type="text" value="' + recordProperties[4].innerHTML +
-      '" list="streets-datalist-edit-form" name="person_data[street_value]">' +
-      '<datalist id="streets-datalist-edit-form"></datalist>' +
-      '<input type="date" name="person_data[birth_date]" value="' + recordProperties[5].innerHTML + '">' +
-      '<input type="tel" name="person_data[phone_number]" value="' +
-      recordProperties[6].innerHTML + '" maxlength="11" required data-type="number">';
+    const formBody = `
+      <input type="text" name="person_data[last_name]" 
+        value="${ recordProperties[0].innerHTML }" required data-type="text">
+      <input type="text" name="person_data[first_name]"
+        value="${ recordProperties[1].innerHTML }" data-type="text">
+      <input type="text" name="person_data[second_name]"
+        value="${ recordProperties[2].innerHTML }" data-type="text">
+      <input type="text" name="person_data[city_value]" id="cities-input-edit-form"
+        value="${ recordProperties[3].innerHTML }" list="cities-datalist">
+      <input type="text" name="person_data[street_value]"
+        value="${ recordProperties[4].innerHTML }" list="streets-datalist-edit-form">
+      <datalist id="streets-datalist-edit-form"></datalist>
+      <input type="date" name="person_data[birth_date]"
+        value="${ recordProperties[5].innerHTML }">
+      <input type="tel" name="person_data[phone_number]"
+        value="${ recordProperties[6].innerHTML }" maxlength="11" required data-type="number">
+    `;
 
     // Delete edit fields of previously edited record
     if (this.prevEditedRecord) {
@@ -244,20 +243,21 @@ export default class PhonebookView {
   render(records) {
     let str = '';
     for (let i in records) {
-      str += 
-        '<div class="record" id="record-' + records[i].id + '">' +
-          '<div class="record__property">' + records[i].last_name + '</div>' +
-          '<div class="record__property">' + records[i].first_name + '</div>' +
-          '<div class="record__property">' + records[i].second_name + '</div>' +
-          '<div class="record__property">' + records[i].city_name + '</div>' +
-          '<div class="record__property">' + records[i].street_name + '</div>' +
-          '<div class="record__property">' + records[i].birth_date + '</div>' +
-          '<div class="record__property">' + records[i].phone_number + '</div>' +
-          '<div class="record__property">'+
-            '<button data-record-id="' + records[i].id + '" class="btn--edit-record">Edit</button>'+
-            '<button data-record-id="' + records[i].id + '" class="btn--delete-record">Del.</button>'+
-          '</div>' +
-        '</div>';
+      str += `
+        <div class="record" id="record-${ records[i].id }"> 
+          <div class="record__property">${ records[i].last_name }</div> 
+          <div class="record__property">${ records[i].first_name }</div> 
+          <div class="record__property">${ records[i].second_name }</div> 
+          <div class="record__property">${ records[i].city_name }</div> 
+          <div class="record__property">${ records[i].street_name }</div> 
+          <div class="record__property">${ records[i].birth_date }</div> 
+          <div class="record__property">${ records[i].phone_number }</div> 
+          <div class="record__property">
+            <button data-record-id="${ records[i].id }" class="btn--edit-record">Edit</button>
+            <button data-record-id="${ records[i].id }" class="btn--delete-record">Del.</button>
+          </div> 
+        </div>
+      `;
     }
 
     // Edit form closed, unset prevEditedRecord
@@ -424,8 +424,9 @@ export default class PhonebookView {
   renderDataList(items, dataListId, propertyName) {
     let options = '';
     for (let i in items) {
-      options +=
-        '<option value="' + items[i][propertyName] + '" data-value-id="' + items[i].id + '">';
+      options += `
+        <option value="${ items[i][propertyName] }" data-value-id="${ items[i].id }">
+      `;
     }
 
     const datalist = document.getElementById(dataListId);
