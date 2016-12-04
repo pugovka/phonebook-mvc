@@ -19,5 +19,5 @@ Database interface is implemented by php files.
 ### Run an example in a dev mode
 `npm run dev`
 
-### Buid an application
+### Build an application
 `npm run build`
